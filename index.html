@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Link Generator</title>
+    <title>Facebook Link Generator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Facebook Safe Link Generator</h1>
+        <h1>Generate Facebook-Safe Links</h1>
         
         <div class="form-group">
             <label>Upload Image:</label>
@@ -18,9 +18,13 @@
             <input type="text" id="adLink" placeholder="https://your-adsterra-link.com">
         </div>
 
-        <button onclick="generate()">Create Safe Link</button>
+        <button onclick="generate()">Create Link</button>
 
-        <div id="result" class="result-box"></div>
+        <div id="result">
+            <h3>Your Facebook-Safe Link:</h3>
+            <input type="text" id="generatedLink" readonly>
+            <button onclick="copyLink()">Copy Link</button>
+        </div>
     </div>
 
     <script src="script.js"></script>

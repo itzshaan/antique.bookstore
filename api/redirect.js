@@ -1,13 +1,33 @@
 export default function handler(req, res) {
-    const { to } = req.query;
-    
-    if (!to) {
-        return res.status(400).send('Missing link parameter');
+    const { image, url } = req.query;
+
+    if (!image || !url) {
+        return res.status(400).send('Missing parameters');
     }
 
-    // Decode the link
-    const decodedLink = Buffer.from(to, 'base64').toString('ascii');
-    
-    // Permanent redirect
-    res.redirect(308, decodedLink);
+    // Decode parameters
+    const decodedImage = Buffer.from(image, 'base64').toString('ascii');
+    const decodedUrl = Buffer.from(url, 'base64').toString('ascii');
+
+    // HTML with Open Graph tags for Facebook
+    const html = `
+    <!DOCTYPE html>
+    <html prefix="og: https://ogp.me/ns#">
+    <head>
+        <meta property="og:title" content="Check this out!">
+        <meta property="og:image" content="${decodedImage}">
+        <meta property="og:description" content="Amazing offer">
+        <meta property="og:url" content="${decodedUrl}">
+        <meta http-equiv="refresh" content="0; url=${decodedUrl}">
+    </head>
+    <body>
+        <script>
+            window.location.href = "${decodedUrl}";
+        </script>
+    </body>
+    </html>
+    `;
+
+    res.setHeader('Content-Type', 'text/html');
+    res.send(html);
 }

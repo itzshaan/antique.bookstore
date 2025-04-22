@@ -8,37 +8,19 @@ async function generate() {
         return;
     }
 
-    // Host image (free solution)
-    const imageUrl = await uploadToImgur(imageInput.files[0]);
-    
-    // Encode parameters
-    const encodedImage = btoa(imageUrl);
-    const encodedUrl = btoa(adLink);
-    
-    // Generate safe link
-    const safeLink = `${window.location.origin}/api/redirect?image=${encodedImage}&url=${encodedUrl}`;
-    result.value = safeLink;
-}
-
-// Free image hosting using Imgur (create free account)
-async function uploadToImgur(file) {
-    const formData = new FormData();
-    formData.append('image', file);
-
-    try {
-        const response = await fetch('https://api.imgur.com/3/image', {
-            method: 'POST',
-            headers: {
-                Authorization: 'Client-ID ce837a14e49290e'
-            },
-            body: formData
-        });
-        const data = await response.json();
-        return data.data.link;
-    } catch (error) {
-        alert('Image upload failed');
-        return null;
-    }
+    // Convert image to Base64
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        const base64Image = e.target.result;
+        
+        // Generate safe link
+        const encodedImage = btoa(base64Image);
+        const encodedUrl = btoa(adLink);
+        const safeLink = `${window.location.origin}/api/redirect?image=${encodedImage}&url=${encodedUrl}`;
+        
+        result.value = safeLink;
+    };
+    reader.readAsDataURL(imageInput.files[0]);
 }
 
 function copyLink() {
